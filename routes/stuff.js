@@ -10,7 +10,9 @@ const express = require('express');     //Help to configure NodeJs server
 const router = express.Router();
 
 //Association des fonctions aux routes
-const stuffController = require('../controllers/stuff')
+const stuffController = require('../controllers/stuff');
+//Middleware d'authentification
+const auth = require('../middleware/auth');
 
 
 /**************************************************
@@ -30,24 +32,24 @@ router.use((req, res, next) => {
 //Thing
 // Grâce à router le chemin /api/stuff/ est juste /
 //Pas de () car on n'appelle pas la fonction, on l'applique
-router.post('/', stuffController.createThing);
+router.post('/', auth, stuffController.createThing);
 
 
 /**************************************************
  *                     HTTP PUT
  **************************************************/
-router.put('/:id', stuffController.modifyThing);
+router.put('/:id', auth, stuffController.modifyThing);
 
 /**************************************************
  *                     HTTP DELETE
  **************************************************/
-router.delete('/:id', stuffController.deleteThing);
+router.delete('/:id', auth, stuffController.deleteThing);
 
 /**************************************************
  *                     HTTP GET
  **************************************************/
-router.get('/:id', stuffController.getThingById);
-router.get('/', stuffController.getAllThings);
+router.get('/:id', auth, stuffController.getThingById);
+router.get('/', auth, stuffController.getAllThings);
 
 
 

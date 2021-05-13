@@ -1,8 +1,13 @@
+/**********************************************
+ *              EXPRESS CONTROLLERS           *
+ **********************************************/
+
 /**************************************************
  *              mongoDB data models
  **************************************************/
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 
 
@@ -39,7 +44,12 @@ exports.login = (req, res, next) => {
                     }
                     res.status(200).json({
                         userID: user._id,
-                        token: 'TOKEN'
+                        //Ce token sera vérifié par le back à chaque requête du front
+                        token: jwt.sign(
+                            { userId: user._id },
+                            'RANDOM_TOKEN_SECRET',
+                            { expiresIn: '24h' }
+                        )
                     });
                 })
                 .catch(error => res.status(500).json({ error }));
